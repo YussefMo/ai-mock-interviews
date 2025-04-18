@@ -43,32 +43,26 @@ const AuthForm = ({ type }: { type: FormType }) => {
       if (type === 'sign-up') {
         const { name, email, password } = data;
 
-        try {
-          const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
 
-          const result = await signUp({
-            uid: userCredential.user.uid,
-            name: name!,
-            email,
-            password
-          });
+        const result = await signUp({
+          uid: userCredential.user.uid,
+          name: name!,
+          email,
+          password
+        });
 
-          if (result?.success === false) {
-            toast.warning(
-              'Account created'
-            );
-          } else {
-            toast.success('Account created successfully. Please sign in.');
-          }
-
-          router.push('/sign-in');
-        } catch (err: any) {
-          toast.error(err?.message || 'Sign-up failed. Please try again.');
+        if (!result.success) {
+          toast.error(result.message);
+          return;
         }
+
+        toast.success('Account created successfully. Please sign in.');
+        router.push('/sign-in');
       } else {
         const { email, password } = data;
 

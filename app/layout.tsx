@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: 'An Ai-Powered Platform for preparing for mock interviews.'
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
