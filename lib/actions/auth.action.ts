@@ -27,7 +27,6 @@ export async function setSessionCookie(idToken: string) {
 
 export async function signUp(params: SignUpParams) {
   const { uid, name, email } = params;
-  console.log('Creating user in Firestore:', { uid, name, email });
 
   try {
     const userRecord = await db.collection('users').doc(uid).get();
@@ -39,9 +38,6 @@ export async function signUp(params: SignUpParams) {
         message: 'User already exists. Please sign in.'
       };
     }
-
-    // Log to verify data before writing
-    console.log('Creating user in Firestore:', { uid, name, email });
 
     // Creating the user in Firestore
     await db.collection('users').doc(uid).set({

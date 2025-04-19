@@ -17,39 +17,21 @@ function initializeAdminApp() {
   }
 
   try {
-    // Try to get the existing app first
-    app = getApp();
-    console.log(
-      'Firebase Admin SDK already initialized. Getting existing app.'
-    );
-    console.log(
-      'Existing default app Project ID from options:',
-      app.options.projectId // Log project ID from the app instance
-    );
-    console.log('Existing app.options:', app.options);
-  } catch (error: any) {
-    // If getApp() throws, it means the default app doesn't exist, so initialize it
-    console.log('No existing default app found, initializing...', error);
-    try {
-      app = initializeApp({
-        credential: cert({
-          projectId: projectId, // Use variable directly
-          clientEmail: clientEmail, // Use variable directly
-          privateKey: privateKey.replace(/\\n/g, '\n')
-        })
-      });
-      console.log(
-        'Firebase Admin SDK initialized successfully. Project ID from options:',
-        app.options.projectId // Log project ID from the app instance
-      );
-    } catch (initError) {
-      console.error('Error initializing Firebase Admin SDK:', initError);
-      throw initError; // Re-throw initialization errors
-    }
+    app = initializeApp({
+      credential: cert({
+        projectId: projectId, // Use variable directly
+        clientEmail: clientEmail, // Use variable directly
+        privateKey: privateKey.replace(/\\n/g, '\n')
+      })
+    });
+  } catch (initError) {
+    console.error('Error initializing Firebase Admin SDK:', initError);
+    throw initError; // Re-throw initialization errors
   }
 }
 
 function getFirebaseAdminServices() {
+  app = getApp();
   if (!app) {
     initializeAdminApp(); // Initialize if not already done
   }
@@ -64,23 +46,12 @@ function getFirebaseAdminServices() {
     throw new Error('Invalid Firebase Admin App instance.');
   }
 
-  console.log(
-    'App instance seems valid before getting services. Project ID from options:',
-    app.options.projectId
-  );
-
   try {
     console.log('Attempting to get Auth and Firestore instances...');
     const authInstance = getAuth(app); // Explicitly pass the app instance
     console.log('Auth instance obtained:', !!authInstance);
     const dbInstance = getFirestore(app); // Explicitly pass the app instance
     console.log('Firestore instance obtained:', !!dbInstance);
-
-    // Log the project ID using the app instance directly
-    console.log(
-      'Auth and Firestore instances obtained using app for project:',
-      app.options.projectId // Use the validated app instance's project ID
-    );
     console.log('-----------------------------------------');
     return {
       auth: authInstance,
