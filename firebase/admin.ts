@@ -31,12 +31,27 @@ function initializeAdminApp() {
 }
 
 function getFirebaseAdminServices() {
-  app = getApp();
-  if (!app) {
-    initializeAdminApp(); // Initialize if not already done
+  // Try to get the existing default app instance
+  try {
+    app = getApp();
+  } catch (error) {
+    // If no default app exists, initialize one
+    if (
+      (error as Error).message.includes(
+        'The default Firebase app does not exist'
+      )
+    ) {
+      console.log('Default Firebase app not found, initializing...');
+      initializeAdminApp();
+      app = getApp(); // Get the newly initialized app
+    } else {
+      // Re-throw other errors during getApp()
+      console.error('Error getting Firebase app:', error);
+      throw error;
+    }
   }
 
-  // Ensure we have a valid app instance after attempting initialization
+  // Ensure we have a valid app instance
   if (!app || !app.options) {
     console.error(
       'Firebase Admin App instance is invalid after initialization attempt.'

@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "cSpell.words": ["Firestore", "techstack"]
+  "cSpell.words": ["behavioural", "Firestore", "techstack", "vapi"]
 }
