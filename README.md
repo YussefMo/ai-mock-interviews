@@ -43,9 +43,7 @@ a beautiful, interactive, and user-friendly environment.
 ## 🖼️ Screenshots
 
 <div align="center">
-  <img src="./public/covers/facebook.png" alt="Interview Dashboard" width="250" />
-  <img src="./public/ai-avatar.png" alt="AI Interviewer" width="120" />
-  <img src="./public/user-avatar.png" alt="User Avatar" width="120" />
+  <img src="./public/do" alt="Interview Dashboard" width="250" />
 </div>
 
 ---
