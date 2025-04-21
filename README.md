@@ -146,10 +146,4 @@ Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ---
 
-## 📄 License
-
-[MIT](LICENSE)
-
----
-
 Feel free to open issues or contribute to help improve the platform!
