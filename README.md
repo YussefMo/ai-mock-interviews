@@ -43,7 +43,7 @@ a beautiful, interactive, and user-friendly environment.
 ## 🖼️ Screenshots
 
 <div align="center">
-  <img src="./public/do" alt="Interview Dashboard" width="250" />
+  <img src="./public/download.png" alt="Interview Dashboard" width="250" />
 </div>
 
 ---
@@ -76,7 +76,7 @@ a beautiful, interactive, and user-friendly environment.
    npm install
    ```
 3. **Configure environment variables:**
-   - Copy `.env.example` to `.env.local` and fill in your Firebase and API keys.
+   - Copy `env.example.txt` to `.env.local` and fill in your Firebase and API keys.
 
 ### Running the App
 
@@ -126,8 +126,6 @@ We welcome contributions! To get started:
 2. Create a new branch (`git checkout -b feature/your-feature`)
 3. Commit your changes
 4. Push to your fork and submit a pull request
-
-Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ---
 
