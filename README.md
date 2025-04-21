@@ -43,7 +43,7 @@ a beautiful, interactive, and user-friendly environment.
 ## 🖼️ Screenshots
 
 <div align="center">
-  <img src="./public/download.png" alt="Interview Dashboard" width="250" />
+  <img src="./public/download.png" alt="Interview Dashboard" />
 </div>
 
 ---
