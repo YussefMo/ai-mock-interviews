@@ -1,4 +1,7 @@
 import InterviewCard from '@/components/InterviewCard';
+import SuspenseWrapper, {
+  InterviewCardSkeleton
+} from '@/components/SuspenseWrapper';
 import { Button } from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import {
@@ -42,13 +45,15 @@ async function page() {
       <section className="mt-8 flex flex-col gap-6">
         <h2>Your Interviews</h2>
         <div className="interviews-section">
-          {hasPastInterviews ? (
-            userInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
-            ))
-          ) : (
-            <p>You haven&apos;t generate any interviews yet</p>
-          )}
+          <SuspenseWrapper fallback={<InterviewCardSkeleton />}>
+            {hasPastInterviews ? (
+              userInterviews?.map((interview) => (
+                <InterviewCard {...interview} key={interview.id} />
+              ))
+            ) : (
+              <p>You haven&apos;t generate any interviews yet</p>
+            )}
+          </SuspenseWrapper>
         </div>
       </section>
       <section className="mt-8 flex flex-col gap-6">

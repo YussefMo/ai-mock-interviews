@@ -93,7 +93,7 @@ export default function FeedbackDisplay({
         </ul>
       </div>
 
-      <div className="buttons">
+      <div className="buttons flex gap-2">
         <Button className="btn-secondary flex-1">
           <Link href="/" className="flex w-full justify-center">
             <p className="text-primary-200 text-center text-sm font-semibold">
