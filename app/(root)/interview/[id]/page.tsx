@@ -1,23 +1,25 @@
 import Agent from '@/components/Agent';
 import DisplayTechIcons from '@/components/DisplayTechIcons';
+import SuspenseWrapper, {
+  InterviewDetailsSkeleton
+} from '@/components/SuspenseWrapper';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import { getInterviewsDetailsById } from '@/lib/actions/general.action';
 import { getRandomInterviewCover } from '@/lib/utils';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import SuspenseWrapper, {
-  InterviewCardSkeleton
-} from '@/components/SuspenseWrapper';
 
 async function Page({ params }: RouteParams) {
   const { id } = await params;
   const interview = await getInterviewsDetailsById(id);
   const user = await getCurrentUser();
 
+  console.log(user?.id);
+
   if (!interview) redirect('/');
 
   return (
-    <SuspenseWrapper fallback={<InterviewCardSkeleton />}>
+    <SuspenseWrapper fallback={<InterviewDetailsSkeleton />}>
       <>
         <div className="flex flex-row justify-between gap-4">
           <div className="flex flex-row items-center gap-4 max-sm:flex-col">
@@ -42,6 +44,7 @@ async function Page({ params }: RouteParams) {
           type="interview"
           interviewId={id}
           questions={interview.questions}
+          userId={user?.id}
         />
       </>
     </SuspenseWrapper>

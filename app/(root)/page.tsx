@@ -4,23 +4,19 @@ import SuspenseWrapper, {
 } from '@/components/SuspenseWrapper';
 import { Button } from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/actions/auth.action';
-import {
-  getInterviewsByUserId,
-  getLatestInterviews
-} from '@/lib/actions/general.action';
+import { getInterviewsByUserId } from '@/lib/actions/general.action';
 import Image from 'next/image';
 import Link from 'next/link';
 
 async function page() {
   const user = await getCurrentUser();
+  console.log(user?.id);
 
-  const [userInterviews, latestInterviews] = await Promise.all([
-    await getInterviewsByUserId(user?.id!),
-    await getLatestInterviews({ userId: user?.id! })
+  const [userInterviews] = await Promise.all([
+    await getInterviewsByUserId(user?.id!)
   ]);
 
   const hasPastInterviews = userInterviews?.length! > 0;
-  const hasUpcomingInterviews = latestInterviews?.length! > 0;
 
   return (
     <>
@@ -48,24 +44,20 @@ async function page() {
           <SuspenseWrapper fallback={<InterviewCardSkeleton />}>
             {hasPastInterviews ? (
               userInterviews?.map((interview) => (
-                <InterviewCard {...interview} key={interview.id} />
+                <InterviewCard
+                  key={interview.id}
+                  id={interview.id}
+                  userId={user?.id}
+                  role={interview.role}
+                  type={interview.type}
+                  techstack={interview.techstack}
+                  createdAt={interview.createdAt}
+                />
               ))
             ) : (
               <p>You haven&apos;t generate any interviews yet</p>
             )}
           </SuspenseWrapper>
-        </div>
-      </section>
-      <section className="mt-8 flex flex-col gap-6">
-        <h2>Take An Generated Interview By Others</h2>
-        <div className="interviews-section">
-          {hasUpcomingInterviews ? (
-            latestInterviews?.map((interview) => (
-              <InterviewCard {...interview} key={interview.id} />
-            ))
-          ) : (
-            <p>There are no new interviews available</p>
-          )}
         </div>
       </section>
     </>

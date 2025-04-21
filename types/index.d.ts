@@ -67,10 +67,7 @@ interface GetFeedbackByInterviewIdParams {
   userId: string;
 }
 
-interface GetLatestInterviewsParams {
-  userId: string;
-  limit?: number;
-}
+
 
 interface SignInParams {
   email: string;

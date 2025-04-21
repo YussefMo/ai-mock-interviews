@@ -2,6 +2,7 @@ import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
 import { getRandomInterviewCover } from '@/lib/utils';
 import { db } from '@/firebase/admin';
+import { revalidatePath } from 'next/cache';
 
 export async function GET() {
   return Response.json({ success: true, data: 'THANK YOU!' }, { status: 200 });
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
     };
 
     await db.collection('interviews').add(interview);
+    revalidatePath('/');
 
     return Response.json({ success: true }, { status: 200 });
   } catch (err: any) {

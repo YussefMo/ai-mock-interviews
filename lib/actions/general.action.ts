@@ -4,6 +4,7 @@ import { feedbackSchema } from '@/constants';
 import { db } from '@/firebase/admin';
 import { google } from '@ai-sdk/google';
 import { generateObject } from 'ai';
+import { revalidatePath } from 'next/cache';
 
 export async function getInterviewsByUserId(
   userId: string
@@ -12,25 +13,6 @@ export async function getInterviewsByUserId(
     .collection('interviews')
     .where('userId', '==', userId)
     .orderBy('createdAt', 'desc')
-    .get();
-
-  return interviews.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data()
-  })) as Interview[];
-}
-
-export async function getLatestInterviews(
-  params: GetLatestInterviewsParams
-): Promise<Interview[] | null> {
-  const { userId, limit = 5 } = params;
-
-  const interviews = await db
-    .collection('interviews')
-    .orderBy('createdAt', 'desc')
-    .where('finalized', '==', true)
-    .where('userId', '!=', userId)
-    .limit(limit)
     .get();
 
   return interviews.docs.map((doc) => ({
@@ -100,6 +82,7 @@ export async function createFeedback(params: CreateFeedbackParams) {
     }
 
     await feedbackRef.set(feedback);
+    revalidatePath('/');
 
     return { success: true, feedbackId: feedbackRef.id };
   } catch (error) {
@@ -108,24 +91,42 @@ export async function createFeedback(params: CreateFeedbackParams) {
   }
 }
 
-export async function getFeedbackByInterviewID(
+export async function getFeedbackByInterviewId(
   params: GetFeedbackByInterviewIdParams
 ): Promise<Feedback | null> {
   const { interviewId, userId } = params;
 
-  const feedbackSnapshot = await db
-    .collection('feedback')
-    .where('interviewId', '==', interviewId)
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc')
-    .get();
+  // ✅ 1. Validate inputs early
+  if (!interviewId || !userId) {
+    return null;
+  }
 
-  if (feedbackSnapshot.empty) return null;
+  try {
+    // ✅ 2. Perform the query
+    const feedbackSnapshot = await db
+      .collection('feedback')
+      .where('interviewId', '==', interviewId)
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .get();
 
-  const feedbackDoc = feedbackSnapshot.docs[0];
+    // ✅ 3. Log for debugging if nothing is found
+    if (feedbackSnapshot.empty) {
+      console.info(
+        '[getFeedbackByInterviewId] No feedback found for interview',
+        { interviewId, userId }
+      );
+      return null;
+    }
 
-  return {
-    id: feedbackDoc.id,
-    ...feedbackDoc.data()
-  } as Feedback;
+    const feedbackDoc = feedbackSnapshot.docs[0];
+
+    return {
+      id: feedbackDoc.id,
+      ...feedbackDoc.data()
+    } as Feedback;
+  } catch (error) {
+    console.error('[getFeedbackByInterviewId] Firestore error:', error);
+    return null;
+  }
 }

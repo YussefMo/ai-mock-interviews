@@ -80,4 +80,30 @@ export function FeedbackSkeleton() {
   );
 }
 
+/**
+ * A loading skeleton for interviewer content
+ */
+
+export function InterviewDetailsSkeleton() {
+  return (
+    <div className="w-full animate-pulse">
+      <div className="flex flex-row justify-between gap-4">
+        <div className="flex flex-row items-center gap-4 max-sm:flex-col">
+          <div className="flex flex-row items-center gap-4">
+            <div className="bg-light-600/30 size-[40px] rounded-full"></div>
+            <div className="bg-light-600/30 h-6 w-32 rounded"></div>
+          </div>
+          <div className="flex flex-row gap-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-light-600/30 size-6 rounded"></div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-light-600/30 h-10 w-24 rounded-lg"></div>
+      </div>
+      <div className="bg-light-600/30 mt-8 h-[500px] w-full rounded-xl"></div>
+    </div>
+  );
+}
+
 export default SuspenseWrapper;

@@ -4,7 +4,7 @@ import SuspenseWrapper, {
 } from '@/components/SuspenseWrapper';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 import {
-  getFeedbackByInterviewID,
+  getFeedbackByInterviewId,
   getInterviewsDetailsById
 } from '@/lib/actions/general.action';
 import { redirect } from 'next/navigation';
@@ -14,7 +14,7 @@ async function Page({ params }: RouteParams) {
   const user = await getCurrentUser();
   const interview = await getInterviewsDetailsById(id);
   if (!interview) redirect('/');
-  const feedback = await getFeedbackByInterviewID({
+  const feedback = await getFeedbackByInterviewId({
     interviewId: id,
     userId: user?.id!
   });
